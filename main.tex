@@ -23,12 +23,17 @@
     \setCJKmainfont{Heiti SC}
     \setCJKsansfont{Heiti SC}
   }{%
-    \IfFontExistsTF{Songti SC}{%
-      \setCJKmainfont{Songti SC}
-      \setCJKsansfont{Songti SC}
+    \IfFontExistsTF{FandolHei-Regular.otf}{%
+      \setCJKmainfont[BoldFont=FandolHei-Regular.otf]{FandolSong-Regular.otf}
+      \setCJKsansfont[BoldFont=FandolHei-Regular.otf]{FandolHei-Regular.otf}
     }{%
-      \setCJKmainfont{STSong}
-      \setCJKsansfont{STSong}
+      \IfFontExistsTF{Songti SC}{%
+        \setCJKmainfont{Songti SC}
+        \setCJKsansfont{Songti SC}
+      }{%
+        \setCJKmainfont{STSong}
+        \setCJKsansfont{STSong}
+      }
     }
   }
 \fi
