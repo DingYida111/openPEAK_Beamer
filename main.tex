@@ -137,31 +137,38 @@
 \end{frame}
 
 \begin{frame}[plain]
-\pagehead{OpenPEAK 解法：双模式 + OGF 约束 + 本地证据链}{把“快”和“准”拆开，让用户明确知道当前调用的工作模式}
+\pagehead{OpenPEAK 解法：双模式 + 治理层 + 审计层}{把“快”和“准”拆开，同时把证据、边界、日志纳入同一条本地流程}
 \begin{center}
 \begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\scriptsize}]
-  \node[draw=PeakNavy,fill=PeakNavy,rounded corners=3pt,line width=0.8pt,text width=2.15cm,align=center,inner sep=6pt] at (1.05,3.15) {\color{white}\bfseries 用户入口\\[0.15em]\mdseries Web / TUI / CLI};
-  \node (entry) at (1.05,3.15) {};
-  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,line width=0.8pt,text width=2.15cm,align=center,inner sep=6pt,font=\scriptsize\bfseries] (router) at (3.45,3.15) {模式路由\\显式选择};
-  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,line width=0.9pt,text width=2.55cm,align=center,inner sep=7pt] (direct) at (6.15,4.30) {\bfseries Direct\\\muted{简单问答 / 快速检查}\\\color{PeakGreen}低上下文成本};
-  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,line width=0.9pt,text width=2.55cm,align=center,inner sep=7pt] (ogf) at (6.15,2.00) {\bfseries OGF Expert\\\muted{FICC / 量化 / 风控}\\\color{PeakPurple}证据化流程};
-  \node[draw=PeakGray,fill=white,rounded corners=3pt,line width=0.8pt,text width=2.65cm,align=center,inner sep=7pt,font=\scriptsize\bfseries] (gateway) at (9.35,3.15) {内网模型网关\\Local Endpoint};
-  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,line width=0.8pt,text width=2.05cm,align=center,inner sep=6pt] (trace) at (12.05,4.30) {\bfseries Trace Logs\\可审计};
-  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,line width=0.8pt,text width=2.05cm,align=center,inner sep=6pt] (wiki) at (12.05,2.00) {\bfseries LLM Wiki\\可沉淀};
-  \draw[-{Stealth[length=2mm]},PeakOrange,thick] (1.25,3.15) -- (router.west);
-  \draw[-{Stealth[length=2mm]},PeakGreen,thick] (router.east) -- ++(0.45,0) |- (direct.west);
-  \draw[-{Stealth[length=2mm]},PeakPurple,thick] (router.east) -- ++(0.45,0) |- (ogf.west);
-  \draw[-{Stealth[length=2mm]},PeakGray,thick] (direct.east) -- ++(0.45,0) |- (gateway.north west);
-  \draw[-{Stealth[length=2mm]},PeakGray,thick] (ogf.east) -- ++(0.45,0) |- (gateway.south west);
-  \draw[-{Stealth[length=2mm]},PeakOrange,thick] (gateway.east) -- ++(0.45,0) |- (trace.west);
-  \draw[-{Stealth[length=2mm]},PeakOrange,thick] (ogf.east) -- ++(1.35,0) |- (wiki.west);
-  \node[draw=PeakNavy,fill=white,rounded corners=2pt,text width=11.5cm,align=center,inner sep=5pt,font=\scriptsize\bfseries] at (6.55,0.48) {简单诉求走 Direct；高风险、专业、需要证据的问题走 OGF Expert。默认专家模式，但允许用户显式切换。};
+  \fill[PeakOrangeLight] (7.10,1.52) rectangle (9.78,4.55);
+  \draw[PeakOrange,line width=0.8pt] (7.10,1.52) rectangle (9.78,4.55);
+  \node[PeakOrangeDark,font=\bfseries] at (8.44,4.25) {治理与审计中枢};
+
+  \node[draw=PeakNavy,fill=PeakNavy,rounded corners=3pt,line width=0.8pt,text width=1.95cm,align=center,inner sep=6pt] (entry) at (0.95,3.08) {\color{white}\bfseries 用户入口\\[0.15em]\mdseries Web / TUI / CLI};
+  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,line width=0.8pt,text width=2.05cm,align=center,inner sep=6pt,font=\scriptsize\bfseries] (router) at (3.08,3.08) {模式选择\\显式提示};
+  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,line width=0.8pt,text width=2.20cm,align=center,inner sep=6pt] (direct) at (5.58,3.98) {\bfseries Direct\\\muted{轻量问答}\\\color{PeakGreen}低上下文成本};
+  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,line width=0.8pt,text width=2.20cm,align=center,inner sep=6pt] (ogf) at (5.58,2.18) {\bfseries OGF Expert\\\muted{FICC / 量化 / 风控}\\\color{PeakPurple}证据化流程};
+  \node[draw=PeakOrangeDark,fill=white,rounded corners=3pt,line width=0.9pt,text width=2.15cm,align=center,inner sep=7pt,font=\scriptsize\bfseries] (gov) at (8.44,3.08) {ontology\\profile / scope\\provenance};
+  \node[draw=PeakNavy,fill=white,rounded corners=3pt,line width=0.8pt,text width=2.10cm,align=center,inner sep=5pt] (gateway) at (11.40,4.08) {\bfseries 内网模型网关\\\muted{Local Endpoint}};
+  \node[draw=PeakOrange,fill=white,rounded corners=3pt,line width=0.8pt,text width=2.10cm,align=center,inner sep=5pt] (audit) at (11.40,3.08) {\bfseries 日志管理\\\muted{JSONL / artifacts}};
+  \node[draw=PeakGreen,fill=white,rounded corners=3pt,line width=0.8pt,text width=2.10cm,align=center,inner sep=5pt] (wiki) at (11.40,2.08) {\bfseries 本地知识库\\\muted{LLM Wiki}};
+
+  \draw[-{Stealth[length=2mm]},PeakOrange,thick] (entry.east) -- (router.west);
+  \draw[-{Stealth[length=2mm]},PeakGreen,thick] (router.east) to[out=10,in=180] (direct.west);
+  \draw[-{Stealth[length=2mm]},PeakPurple,thick] (router.east) to[out=-10,in=180] (ogf.west);
+  \draw[-{Stealth[length=2mm]},PeakGreen,thick] (direct.east) to[out=0,in=160] (gov.north west);
+  \draw[-{Stealth[length=2mm]},PeakPurple,thick] (ogf.east) to[out=0,in=200] (gov.south west);
+  \draw[-{Stealth[length=2mm]},PeakNavy,thick] (gov.east) to[out=15,in=180] (gateway.west);
+  \draw[-{Stealth[length=2mm]},PeakOrange,thick] (gov.east) -- (audit.west);
+  \draw[-{Stealth[length=2mm]},PeakGreen,thick] (gov.east) to[out=-15,in=180] (wiki.west);
+
+  \node[draw=PeakNavy,fill=white,rounded corners=2pt,text width=11.5cm,align=center,inner sep=5pt,font=\scriptsize\bfseries] at (6.55,0.48) {高风险问题不是只问模型，而是经过本地边界、专家 profile、证据记录和可追溯日志后再生成回答。};
 \end{tikzpicture}
 \end{center}
 \end{frame}
 
 \begin{frame}[plain]
-\pagehead{现场 Demo 应该这样打动领导}{6 分钟内展示“能用、可控、可查、能沉淀”}
+\pagehead{使用路径：从快速问答到可审计专家流程}{用一个连续流程呈现“可用、可控、可查、可沉淀”}
 \begin{columns}[T,totalwidth=\textwidth]
 \begin{column}{0.56\textwidth}
 \begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\scriptsize}]
@@ -175,11 +182,11 @@
 \end{tikzpicture}
 \end{column}
 \begin{column}{0.40\textwidth}
-\begin{block}{建议现场问题}
+\begin{block}{示例问题}
 从 FICC 交易台视角解释 DV01、久期和收益率曲线平移风险的关系，并指出风控复核需要哪些证据。
 \end{block}
 \vspace{0.25em}
-\begin{block}{一句话收束}
+\begin{block}{核心定位}
 OpenPEAK 不是让模型自由发挥，而是让模型在内网边界、专家流程和日志证据下工作。
 \end{block}
 \vspace{0.25em}
@@ -193,10 +200,10 @@ OpenPEAK 不是让模型自由发挥，而是让模型在内网边界、专家�
 \end{frame}
 
 \begin{frame}[plain]
-\pagehead{明天要争取的决策：批准 2--4 周受控试点}{不是要求生产上线，而是验证一个可审计、可量化、可扩展的内网 Agent 底座}
+\pagehead{内网可审计 Agent 工作台：能力闭环}{从运行体检、专家流程到日志审计、知识沉淀，形成可持续治理路径}
 \begin{columns}[T,totalwidth=\textwidth]
 \begin{column}{0.45\textwidth}
-\begin{block}{试点场景}
+\begin{block}{适合承接的场景}
 \begin{itemize}\tightitems
   \item FICC / 量化知识问答与方法复核
   \item 交易、风控、工程问题的证据化排查
@@ -204,12 +211,12 @@ OpenPEAK 不是让模型自由发挥，而是让模型在内网边界、专家�
 \end{itemize}
 \end{block}
 \vspace{0.25em}
-\begin{block}{需要资源}
+\begin{block}{安全与审计信号}
 \begin{itemize}\tightitems
-  \item 一个业务试点团队和 10--20 个好问题
-  \item 内网模型网关或模型额度
-  \item 脱敏材料、日志样例、知识库样例
-  \item 安全、运维、业务验收联系人
+  \item 内网模型网关优先，不依赖公网搜索
+  \item 日期分区 JSONL 日志，便于 Agent 和人工检索
+  \item 请求、响应、路由和证据 artifact 可追溯
+  \item Direct / OGF 模式显式提示，避免误用重流程
 \end{itemize}
 \end{block}
 \end{column}
@@ -220,14 +227,14 @@ OpenPEAK 不是让模型自由发挥，而是让模型在内网边界、专家�
     \draw[PeakGray] (\x,2.22) -- (\x,2.48);
     \node[below] at (\x,2.12) {\t};
   }
-  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (0.95,3.55) {环境就绪\\doctor 通过};
-  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (2.65,3.55) {专家 profile\\知识包};
-  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (4.35,3.55) {业务试用\\问题集评测};
-  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (5.95,3.55) {试点报告\\扩展建议};
+  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (0.95,3.55) {运行体检\\doctor};
+  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (2.65,3.55) {专家流程\\OGF profile};
+  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (4.35,3.55) {日志审计\\trace};
+  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (5.95,3.55) {知识沉淀\\wiki};
   \foreach \a/\b in {1.75/1.85,3.45/3.55,5.12/5.22} {
     \draw[-{Stealth[length=1.8mm]},PeakOrange,thick] (\a,3.45) -- (\b,3.45);
   }
-  \node[draw=PeakOrangeDark,fill=white,rounded corners=3pt,text width=6.2cm,align=center,inner sep=7pt,font=\bfseries] at (3.45,0.92) {最小决策：批准一个受控试点。\\目标是验证“内网可用、答案可追溯、知识可沉淀”。};
+  \node[draw=PeakOrangeDark,fill=white,rounded corners=3pt,text width=6.2cm,align=center,inner sep=7pt,font=\bfseries] at (3.45,0.92) {核心价值：不是让模型自由发挥，\\而是让模型在边界、证据和日志约束下工作。};
 \end{tikzpicture}
 \end{column}
 \end{columns}
