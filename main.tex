@@ -200,41 +200,44 @@ OpenPEAK 不是让模型自由发挥，而是让模型在内网边界、专家�
 \end{frame}
 
 \begin{frame}[plain]
-\pagehead{内网可审计 Agent 工作台：能力闭环}{从运行体检、专家流程到日志审计、知识沉淀，形成可持续治理路径}
+\pagehead{内网可审计 Agent 工作台：协作与自我进化闭环}{从运行体检、Agent 协作到日志复盘、知识回流，形成可持续治理路径}
 \begin{columns}[T,totalwidth=\textwidth]
 \begin{column}{0.45\textwidth}
 \begin{block}{适合承接的场景}
 \begin{itemize}\tightitems
   \item FICC / 量化知识问答与方法复核
   \item 交易、风控、工程问题的证据化排查
-  \item 本地 LLM Wiki：把复盘变成团队知识资产
+  \item Agent-to-Agent 复核，LLM Wiki 沉淀复盘知识
 \end{itemize}
 \end{block}
-\vspace{0.25em}
+\vspace{0.15em}
 \begin{block}{安全与审计信号}
 \begin{itemize}\tightitems
   \item 内网模型网关优先，不依赖公网搜索
-  \item 日期分区 JSONL 日志，便于 Agent 和人工检索
-  \item 请求、响应、路由和证据 artifact 可追溯
-  \item Direct / OGF 模式显式提示，避免误用重流程
+  \item JSONL trace 记录请求、响应、路由和证据
+  \item 复盘先入 Wiki，再进入下一轮 profile 优化
 \end{itemize}
 \end{block}
 \end{column}
 \begin{column}{0.51\textwidth}
 \begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\scriptsize}]
-  \draw[PeakLine,line width=1pt] (0.2,2.35) -- (6.65,2.35);
-  \foreach \x/\t in {0.45/第1周,2.35/第2周,4.25/第3周,6.25/第4周} {
-    \draw[PeakGray] (\x,2.22) -- (\x,2.48);
-    \node[below] at (\x,2.12) {\t};
-  }
-  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (0.95,3.55) {运行体检\\doctor};
-  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (2.65,3.55) {专家流程\\OGF profile};
-  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (4.35,3.55) {日志审计\\trace};
-  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,text width=1.45cm,align=center,inner sep=5pt] at (5.95,3.55) {知识沉淀\\wiki};
-  \foreach \a/\b in {1.75/1.85,3.45/3.55,5.12/5.22} {
-    \draw[-{Stealth[length=1.8mm]},PeakOrange,thick] (\a,3.45) -- (\b,3.45);
-  }
-  \node[draw=PeakOrangeDark,fill=white,rounded corners=3pt,text width=6.2cm,align=center,inner sep=7pt,font=\bfseries] at (3.45,0.92) {核心价值：不是让模型自由发挥，\\而是让模型在边界、证据和日志约束下工作。};
+  \node[draw=PeakNavy,fill=PeakNavy,rounded corners=3pt,text width=1.72cm,align=center,inner sep=6pt] (core) at (3.45,3.16) {\color{white}\bfseries OpenPEAK\\受控协作};
+  \node[draw=PeakBlue,fill=PeakBlueLight,rounded corners=3pt,text width=1.62cm,align=center,inner sep=5pt] (doctor) at (3.45,4.55) {\bfseries 运行体检\\\muted{doctor}};
+  \node[draw=PeakPurple,fill=PeakPurpleLight,rounded corners=3pt,text width=1.62cm,align=center,inner sep=5pt] (profile) at (5.86,3.16) {\bfseries A2A 复核\\\muted{research / risk}};
+  \node[draw=PeakOrange,fill=PeakOrangeLight,rounded corners=3pt,text width=1.62cm,align=center,inner sep=5pt] (trace) at (3.45,1.78) {\bfseries 证据日志\\\muted{trace}};
+  \node[draw=PeakGreen,fill=PeakGreenLight,rounded corners=3pt,text width=1.62cm,align=center,inner sep=5pt] (wiki) at (1.04,3.16) {\bfseries 自我进化\\\muted{wiki / profile}};
+
+  \draw[-{Stealth[length=1.8mm]},PeakBlue,thick] (doctor.east) to[out=8,in=92] (profile.north);
+  \draw[-{Stealth[length=1.8mm]},PeakPurple,thick] (profile.south) to[out=-92,in=8] (trace.east);
+  \draw[-{Stealth[length=1.8mm]},PeakOrange,thick] (trace.west) to[out=172,in=-92] (wiki.south);
+  \draw[-{Stealth[length=1.8mm]},PeakGreen,thick] (wiki.north) to[out=92,in=172] (doctor.west);
+  \draw[PeakLine,line width=0.8pt] (doctor.south) -- (core.north);
+  \draw[PeakLine,line width=0.8pt] (profile.west) -- (core.east);
+  \draw[PeakLine,line width=0.8pt] (trace.north) -- (core.south);
+  \draw[PeakLine,line width=0.8pt] (wiki.east) -- (core.west);
+
+  \node[draw=PeakOrangeDark,fill=white,rounded corners=3pt,text width=5.80cm,align=left,inner sep=6pt] at (3.45,0.52) {\textbf{结构化复盘记录}\\
+  \muted{trace\_id / agent\_role / evidence / review / lessons / profile\_delta}};
 \end{tikzpicture}
 \end{column}
 \end{columns}
